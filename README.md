@@ -1,5 +1,5 @@
 # Onderzoekstechnieken - project data-analyse
-
+## Dit was een project aan HoGent, voor het vak Research Techniques / Onderzoekstechnieken
 Doel van dit project is de stappen van een onderzoeksproces doorlopen en zo ervaring op te doen met het uitschrijven van een onderzoeksvraag of hypothese, het voeren van een literatuurstudie, het correct analyseren van beschikbare data en daarover rapporteren.
 
 ## Teamleden
