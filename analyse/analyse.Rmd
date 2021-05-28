@@ -1,0 +1,601 @@
+---
+title: "Zijn mensen die uit een succesvol gezin komen meer wiskundig geletterd dan mensen die uit minder succesvolle gezinnen komen?"
+subtitle: "Analyse resultaten"
+author: "Pieter Van Keer, Vic Rottiers, Brent De Craemer, Nicolas De Wree"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+dataset <- read_csv(file = "../data/npe-1920-wiskundige-geletterdheid.csv")
+```
+
+
+# GradeMath4IT - EducationFather
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per educatie niveau van de vader
+```{r}
+educationFather <- dataset$EducationFather
+gradeMath4IT <- dataset$GradeMath4IT
+
+ggplot(data = dataset, mapping = aes(x = educationFather, y = gradeMath4IT,fill = educationFather)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8) +
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradeMath4IT[dataset$EducationFather == "Master of equivalent (universiteit)"]
+s2 <- dataset$GradeMath4IT[dataset$EducationFather == "Lager secundair onderwijs"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de opleiding van de vader een middelmatig effect heeft.
+
+$|d| \approx 0.50$  
+$`r abs(round(cohend, 3))` \approx 0.50$
+
+
+Er is een verband tussen de 2 variabelen.
+
+# GradeMath4IT - EducationMother
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per educatie niveau van de moeder
+```{r}
+educationMother <- dataset$EducationMother
+gradeMath4IT <- dataset$GradeMath4IT
+
+ggplot(data = dataset, mapping = aes(x = educationMother, y = gradeMath4IT,fill = educationMother)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradeMath4IT[dataset$EducationMother == "Master of equivalent (universiteit)"]
+s2 <- dataset$GradeMath4IT[dataset$EducationMother == "Lager secundair onderwijs"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de opleiding van de moeder een middelmatig effect hebben.
+
+$|d| \approx 0.50$  
+$`r abs(round(cohend, 3))` \approx 0.50$
+
+
+Er is een verband tussen de 2 variabelen.
+
+# GradeMath4IT - OccupationFather
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per functie van de vader
+```{r}
+occupationFather <- dataset$OccupationFather
+gradeMath4IT <- dataset$GradeMath4IT
+
+ggplot(data = dataset, mapping = aes(x = occupationFather, y = gradeMath4IT,fill = occupationFather)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradeMath4IT[dataset$OccupationFather == "Ambtenaar"]
+s2 <- dataset$GradeMath4IT[dataset$OccupationFather == "Werkloos"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de functie van de vader een groot effect heeft.
+
+$|d| \approx 0.80$  
+$`r abs(round(cohend, 3))` \approx 0.80$
+
+
+Er is een verband tussen de 2 variabelen.
+
+# GradeMath4IT - OccupationMother
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per functie van de moeder
+```{r}
+occupationMother <- dataset$OccupationMother
+gradeMath4IT <- dataset$GradeMath4IT
+
+ggplot(data = dataset, mapping = aes(x = occupationMother, y = gradeMath4IT,fill = occupationMother)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradeMath4IT[dataset$OccupationMother == "Ambtenaar"]
+s2 <- dataset$GradeMath4IT[dataset$OccupationMother == "Werkloos"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat het inkomen een klein effect heeft.
+
+$|d| \approx 0.20$  
+$`r abs(round(cohend, 3))` \approx 0.20$
+
+
+Er is geen verband tussen de 2 variabelen.
+
+# GradeMath4IT - FamilyIncome
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per inkomencategorie van de moeder
+```{r}
+income <- dataset$FamilyIncome
+gradeMath4IT <- dataset$GradeMath4IT
+
+ggplot(data = dataset, mapping = aes(x = income, y = gradeMath4IT,fill = income)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradeMath4IT[dataset$FamilyIncome == "> 6000€"]
+s2 <- dataset$GradeMath4IT[dataset$FamilyIncome == "< 1500€"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat het familieinkomen een klein effect heeft.
+
+$|d| \approx 0.20$  
+$`r abs(round(cohend, 3))` \approx 0.20$
+
+
+Er is geen verband tussen de 2 variabelen.
+
+
+# GradePOD1 - EducationFather
+Op onderstaande grafiek is te zien hoe kinderen scoren op POD 1 opgedeeld per educatie niveau van de vader
+```{r}
+educationFather <- dataset$EducationFather
+gradePOD <- dataset$GradePOD1
+
+ggplot(data = dataset, mapping = aes(x = educationFather, y = gradePOD,fill = educationFather)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradePOD1[dataset$EducationFather == "Master of equivalent (universiteit)"]
+s2 <- dataset$GradePOD1[dataset$EducationFather == "Lager secundair onderwijs"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de opleiding van de vader zeer weinig effect heeft.
+
+$|d| \approx 0.01$  
+$`r abs(round(cohend, 3))` \approx 0.01$
+
+
+Er is geen verband tussen de 2 variabelen.
+
+# GradePOD1 - EducationMother
+Op onderstaande grafiek is te zien hoe kinderen scoren op POD 1 opgedeeld per educatie niveau van de vader
+```{r}
+educationMother <- dataset$EducationMother
+gradePOD <- dataset$GradePOD1
+
+ggplot(data = dataset, mapping = aes(x = educationMother, y = gradePOD,fill = educationMother)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradePOD1[dataset$EducationMother == "Master of equivalent (universiteit)"]
+s2 <- dataset$GradePOD1[dataset$EducationMother == "Lager secundair onderwijs"]
+
+(t <- t.test(s1,s2))
+
+
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de opleiding van de moeder een klein effect heeft.
+
+$|d| \approx 0.20$  
+$`r abs(round(cohend, 3))` \approx 0.20$
+
+
+Er is geen verband tussen de 2 variabelen.
+
+# GradePOD1 - OccupationFather
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per educatie niveau van de vader
+```{r}
+occupationFather <- dataset$OccupationFather
+gradePOD <- dataset$GradePOD1
+
+ggplot(data = dataset, mapping = aes(x = occupationFather, y = gradePOD,fill = occupationFather)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradePOD1[dataset$OccupationFather == "Ambtenaar"]
+s2 <- dataset$GradePOD1[dataset$OccupationFather == "Werkloos"]
+
+(t <- t.test(s1,s2))
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de functie van de vader een groot effect heeft.
+
+$|d| \approx 0.50$  
+$`r abs(round(cohend, 3))` \approx 0.50$
+
+
+Er is een verband tussen de 2 variabelen.
+
+# GradePOD1 - OccupationMother
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per educatie niveau van de vader
+```{r}
+occupationMother <- dataset$OccupationMother
+gradePOD <- dataset$GradePOD1
+
+ggplot(data = dataset, mapping = aes(x = occupationMother, y = gradePOD,fill = occupationMother)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradePOD1[dataset$OccupationMother == "Ambtenaar"]
+s2 <- dataset$GradePOD1[dataset$OccupationMother == "Werkloos"]
+
+(t <- t.test(s1,s2))
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat de functie van de moeder een middelmatig effect heeft.
+
+$|d| \approx 0.20$  
+$`r abs(round(cohend, 3))` \approx 0.20$
+
+
+Er is geen verband tussen de 2 variabelen.
+
+# GradePOD1 - Familyincome
+
+Op onderstaande grafiek is te zien hoe kinderen scoren op Math4IT opgedeeld per educatie niveau van de vader
+```{r}
+income <- dataset$FamilyIncome
+gradePOD <- dataset$GradePOD1
+
+ggplot(data = dataset, mapping = aes(x = income, y = gradePOD,fill = income)) +
+  geom_bar(stat = "summary", fun.y = "mean", )  +
+  geom_errorbar(stat = "summary", fun.data = "mean_sdl", fun.args = list(mult=1),width = .8)+
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+
+## Onderzoek
+
+```{r}
+s1 <- dataset$GradePOD1[dataset$FamilyIncome == "> 6000€"]
+s2 <- dataset$GradePOD1[dataset$FamilyIncome == "< 1500€"]
+
+
+
+(t <- t.test(s1,s2))
+
+# Pooled standard deviation for two samples x and y
+pooled_sd <- function(x, y) {
+  sd_x <- sd(x, na.rm = TRUE)
+  sd_y <- sd(y, na.rm = TRUE)
+  n_x <- length(x)
+  n_y <- length(y)
+  
+  sqrt( ((n_x - 1) * sd_x^2 + (n_y - 1) * sd_y^2)
+        / (n_x + n_y - 2))
+}
+
+# Effect size, Cohen's d
+cohens_d <- function(x, y) {
+  (mean(y, na.rm = TRUE) - mean(x, na.rm = TRUE)) / pooled_sd(x, y)
+}
+
+
+
+cohend <- cohens_d(s1,s2)
+```
+
+## Conclusie
+
+De p-waarde is: `r round(t$p.value, 3)`  
+De cohens-d is: `r round(cohens_d(s1,s2), 3)`
+
+Hieruit kunnen we concluderen dat het familieinkomen een middelmatig effect heeft.
+
+$|d| \approx 0.50$  
+$`r abs(round(cohend, 3))` \approx 0.50$
+
+
+Er is een verband tussen de 2 variabelen.
